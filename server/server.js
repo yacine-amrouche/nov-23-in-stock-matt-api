@@ -7,6 +7,12 @@ app.use(express.json());
 
 
 
+app.use(cors());
+app.use(express.json());
+const PORT = process.env.PORT || 5000;
+const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:3000";
+app.use(cors({ origin: CORS_ORIGIN }));
+
 
 
 
