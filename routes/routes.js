@@ -7,8 +7,7 @@ router.get("/", (req, res) =>{
     res.status(200)
 });
 
-router.route('/warehouses').get(
-    async (req, res) => {
+router.get('/warehouses', async (req, res) => {
         try {
             const warehouses = await knex('warehouses');
             res.status(200).json(warehouses);
