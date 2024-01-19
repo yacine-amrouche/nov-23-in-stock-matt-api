@@ -15,7 +15,7 @@ const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:3000";
 app.use(cors({ origin: CORS_ORIGIN }));
 
 
-app.use('/api', warehouseRoutes); // GET all Warehouses endpoint
+app.use('/api', warehouseRoutes); 
 
 
 app.listen(PORT, () =>{
