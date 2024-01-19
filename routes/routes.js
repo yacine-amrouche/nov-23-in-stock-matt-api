@@ -28,7 +28,7 @@ router.get("/warehouse/:id", (req, res) =>{
 router.get("/inventory/:id", (req, res) =>{
     res.status(200);
 });
-router.get("/warhouse/:id/inventory", (req, res) =>{
+router.get("/warehouse/:id/inventory", (req, res) =>{
     res.status(200);
 });
 
