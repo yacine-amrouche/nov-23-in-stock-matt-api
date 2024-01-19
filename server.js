@@ -18,6 +18,6 @@ app.use(cors({ origin: CORS_ORIGIN }));
 app.use('/api', warehouseRoutes); // GET all Warehouses endpoint
 
 
-app.listen(8080, () =>{
+app.listen(PORT, () =>{
     console.log(`listening on port ${PORT}`);
 })
