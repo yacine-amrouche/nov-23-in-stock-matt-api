@@ -1,23 +1,17 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-require("dotenv").config();
-app.use(express.json());
-const cors = require('cors')
-const warehouseRoutes = require('./routes/routes.js');
+const PORT = process.env.PORT || 5050;
+
+
+const warehouses = require("./routes/routes-warehouse");
+app.use(express.json())
+app.use("/api/warehouses", warehouses);
+
+const inventories = require("./routes/routes-inventories");
+app.use("/api/inventories", inventories);
 
 
 
-
-app.use(cors());
-app.use(express.json());
-const PORT = process.env.PORT || 5000;
-const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:3000";
-app.use(cors({ origin: CORS_ORIGIN }));
-
-
-app.use('/api', warehouseRoutes); // GET all Warehouses endpoint
-
-
-app.listen(8080, () =>{
-    console.log(`listening on port ${PORT}`);
-})
+app.listen(PORT, () => {
+  console.log(`running at http://localhost:${PORT}`);
+});
