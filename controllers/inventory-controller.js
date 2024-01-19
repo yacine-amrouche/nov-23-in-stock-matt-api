@@ -34,7 +34,7 @@ const index = async (_req, res) => {
   
 
 module.exports = {
-  index,
+  index, 
   remove,
   
 }
