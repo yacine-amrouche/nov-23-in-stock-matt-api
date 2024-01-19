@@ -21,7 +21,10 @@ router.get("/inventory", (req, res) =>{
     res.status(200)
 });
 
-router.get("/warehouse/:id", (req, res) =>{
+router.get("/warehouses/:id", (req, res) =>{
+    const id = req.params.id;
+    
+    
     res.status(200);
 });
 
