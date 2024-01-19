@@ -1,7 +1,7 @@
 const express = require("express");
-const cors = require("cors");
 const router = express();
-
+const knexConfig = require('../knexfile.js').development; 
+const knex = require('knex')(knexConfig);
 
 router.get("/", (req, res) =>{
     res.status(200)
@@ -10,7 +10,7 @@ router.get("/", (req, res) =>{
 router.route('/warehouses').get(
     async (req, res) => {
         try {
-            const warehouses = await knex('warehouses')
+            const warehouses = await knex('warehouses');
             res.status(200).json(warehouses);
         } catch (error) {
             res.status(400).json(`Error getting warehouses: ${error}`);
