@@ -7,3 +7,5 @@ router.route("/:id")
     .delete(warehouses.remove)
     .put(warehouses.update)
 module.exports = router;
+
+router.route('/:id/inventories').get(warehouses.joinTable);

@@ -101,12 +101,25 @@ const update = async (req, res) => {
     } catch (error) {
       return res.status(500).json({ error: "Server error" });
     }
-}
+};
 
+const joinTable = async (req, res) => {
+  try {
+      const inventories = await knex("warehouses")
+      .where({ warehouse_id: req.params.id })
+      .join("inventories", "inventories.warehouse_id", "warehouses.id");
+      res.json(inventories);
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to retrieve posts for user with ID ${req.params.id}: ${error}`,
+    });
+  }
+};
   
 
 module.exports = {
   index,
   remove,
   update,
+  joinTable,
 }
