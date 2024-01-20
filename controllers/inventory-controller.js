@@ -1,14 +1,49 @@
 const knexConfig = require("../knexfile.js").development;
 const knex = require("knex")(knexConfig);
 
-const index = async (_req, res) => {
+// //Don't think we need this -Tomas
+// const index = async (_req, res) => {
+//   try {
+//     const data = await knex("inventories");
+//     res.status(200).json(data);
+//   } catch (err) {
+//     res.status(400).send(`Error retrieving Users: ${err}`);
+//   }
+// };
+
+//Retrieve all inventory items from all warehouses
+//converts each warehouse id into the warehouse's name
+//This can probably be done with knex join
+const allInventoryItems = async (_req, res) => {
+  
+  const warehouseIdToName = async (warehouse_id) => {
+    const warehouse = await knex('warehouses').where({ id: warehouse_id }).first();    
+    return warehouse ? warehouse.warehouse_name : null;
+  };
+  
   try {
-    const data = await knex("inventories");
-    res.status(200).json(data);
-  } catch (err) {
-    res.status(400).send(`Error retrieving Users: ${err}`);
+    const data = await knex("inventories");    
+    
+    //Wait for all other promises, then
+    //create a new array with inventory items as objects
+    const invWithWarehouseNames = await Promise.all(data.map(async (item) => {      
+      const { id, warehouse_id, ...rest } = item;   //destructure to separate warehouse_id from list item key/values
+      const warehouse_name = await warehouseIdToName(item.warehouse_id);
+    
+      //remake the inventory list object in order
+      return {
+        id,
+        warehouse_name,
+        ...rest,        
+      };
+    }));
+
+
+    res.status(200).json(invWithWarehouseNames);
+  } catch (error) {
+    console.log("error at inventory controller allInventoryItems: ", error)
   }
-};
+}
 
 const remove = async (req, res) => {
   try {
@@ -136,7 +171,7 @@ const update = async (req, res) => {
 };
 
 module.exports = {
-  index,
+  allInventoryItems,
   remove,
   update,
 };
