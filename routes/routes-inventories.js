@@ -6,7 +6,8 @@ router.route('/')
     // add route for adding
 router.route("/:id")
     .delete(inventories.remove)
-    .put(inventories.update);
+    .put(inventories.update)
+    .get(inventories.getIndividual);
     //add route for editing
 
 
