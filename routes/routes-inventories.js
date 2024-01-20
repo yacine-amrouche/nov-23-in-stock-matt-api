@@ -1,13 +1,13 @@
-const router = require('express').Router();
+const router = require("express").Router();
 const inventories = require("../controllers/inventory-controller");
 
-router.route('/')
-    .get(inventories.index);
-    // add route for adding
-router.route("/:id")
-    .delete(inventories.remove)
-    .put(inventories.update);
-    //add route for editing
-
+router.route("/").get(inventories.allInventoryItems).post(inventories.add);
+// add route for adding
+router
+  .route("/:id")
+  .delete(inventories.remove)
+  .put(inventories.update)
+  .get(inventories.getIndividual);
+//add route for editing
 
 module.exports = router;
