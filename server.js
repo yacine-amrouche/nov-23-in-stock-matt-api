@@ -4,7 +4,7 @@ require("dotenv").config();
 app.use(express.json());
 const cors = require('cors')
 const warehouseRoutes = require('./routes/routes-warehouse.js');
-//inventory route import like this one ^
+const inventoryRoutes = require("./routes/routes-inventories.js")
 
 
 
@@ -18,7 +18,7 @@ app.use(cors({ origin: CORS_ORIGIN }));
 app.use('/api/warehouses/', warehouseRoutes);
 // app.use('/api', warehouseRoutes); 
 
-//app.use('/api/inventories/', inventoryRoutes);
+app.use('/api/inventories/', inventoryRoutes);
 
 app.listen(PORT, () =>{
     console.log(`listening on port ${PORT}`);
