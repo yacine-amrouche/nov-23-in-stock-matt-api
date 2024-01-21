@@ -30,6 +30,29 @@ const remove = async (req, res) => {
   }
 };
 
+//Find a single warehouse from an id
+const singleWarehouse = async (req, res) => {
+  try {
+    const warehouse = await knex("warehouses")
+      .where({ id: req.params.id});
+
+    //if there is no warehouse return 404 status
+    if (warehouse.length === 0) {
+      return res.status(404).json({
+        message: `Warehouse with ID ${req.params.id} not found`
+      });
+    }
+
+    const warehouseData = warehouse[0];
+    res.json(warehouseData);
+
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to retrieve user data for user with ID ${req.params.id}`,
+    });
+  }
+};
+
 const update = async (req, res) => {
   const isPhoneNumValid = (phone) => {
     const pattern = "^\\+1 \\(\\d{3}\\) \\d{3}-\\d{4}$";
@@ -140,6 +163,7 @@ const add = async (req, res) => {
 module.exports = {
   index,
   remove,
+  singleWarehouse,
   update,
   joinTable,
   add,
