@@ -112,7 +112,7 @@ const update = async (req, res) => {
   }
   try {
     const warehouseId = req.params.id;
-    const updatedData = req.body;
+    const { created_at, updated_at, ...updatedData } = req.body;
     const updated = await knex("warehouses")
       .where({ id: warehouseId })
       .update(updatedData);
@@ -125,6 +125,7 @@ const update = async (req, res) => {
       return res.status(404).json({ error: "Warehouse not found." });
     }
   } catch (error) {
+    console.error("Update error: ", error)
     return res.status(500).json({ error: "Server error" });
   }
 };
