@@ -162,7 +162,7 @@ const getIndividual = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  if (!req.body.warehouse_id || !req.body.item_name) {
+  if (!req.body.warehouse_id || !req.body.item_name || !req.body.status || !req.body.quantity || !req.body.description || !req.body.category) {
     return res.status(400).json({
       message: `Please provide name and email for the user in the request`,
     });
