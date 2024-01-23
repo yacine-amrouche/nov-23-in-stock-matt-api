@@ -68,61 +68,26 @@ const remove = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  const validateWarehouseExists = async (warehouse_id) => {
-    const warehouse = await knex("warehouses")
-      .where({ id: warehouse_id })
-      .first();
-    return warehouse ? true : false;
-  };
-
-  const validateInventoryItemData = async (data) => {
-    const { warehouse_id, item_name, description, category, status, quantity } =
-      data;
-
-    if (!warehouse_id || warehouse_id === "")
-      return { valid: false, error: "Warehouse ID is required." };
-    if (!(await validateWarehouseExists(warehouse_id)))
-      return { valid: false, error: "Warehouse does not exist." };
-    if (!item_name || item_name === "")
-      return { valid: false, error: "Item Name is required." };
-    if (!description || description === "")
-      return { valid: false, error: "Item Description is required." };
-    if (!category || category === "")
-      return { valid: false, error: "Item Category is required." };
-    if (!status || status === "")
-      return { valid: false, error: "Item Status is required." };
-    if (quantity === undefined || quantity === null || isNaN(Number(quantity)))
-      return {
-        valid: false,
-        error: "Item Quantity is required and must be a number.",
-      };
-
-    return { valid: true };
-  };
-
-  const validation = await validateInventoryItemData(req.body);
-  if (!validation.valid) {
-    return res.status(400).json({
-      error: validation.error,
-    });
-  }
-
   try {
-    const inventoryItemId = req.params.id;
-    const updatedData = req.body;
-    const updated = await knex("inventories")
-      .where({ id: inventoryItemId })
-      .update(updatedData);
-    if (updated) {
-      const updatedInventoryItem = await knex("inventories")
-        .where({ id: inventoryItemId })
-        .first();
-      return res.status(200).json(updatedInventoryItem);
-    } else {
-      return res.status(404).json({ error: "Inventory item not found" });
+    const rowsUpdated = await knex("inventories")
+      .where({ id: req.params.id })
+      .update(req.body);
+
+    if (rowsUpdated === 0) {
+      return res.status(404).json({
+        message: `User with ID ${req.params.id} not found`,
+      });
     }
+
+    const updatedUser = await knex("inventories").where({
+      id: req.params.id,
+    });
+
+    res.json(updatedUser[0]);
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({
+      message: `Unable to update user with ID ${req.params.id}: ${error}`,
+    });
   }
 };
 
@@ -162,7 +127,14 @@ const getIndividual = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  if (!req.body.warehouse_id || !req.body.item_name || !req.body.status || !req.body.quantity || !req.body.description || !req.body.category) {
+  if (
+    !req.body.warehouse_id ||
+    !req.body.item_name ||
+    !req.body.status ||
+    !req.body.quantity ||
+    !req.body.description ||
+    !req.body.category
+  ) {
     return res.status(400).json({
       message: `Please provide name and email for the user in the request`,
     });
